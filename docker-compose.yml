@@ -1,0 +1,8 @@
+version: '3'
+services:
+  forecaster:
+    build:
+      context: forecaster
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:80:80"
