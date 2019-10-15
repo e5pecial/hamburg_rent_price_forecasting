@@ -39,6 +39,16 @@ def predict():
     return jsonify(response_body)
 
 
+@app.route('/predict_batch', methods=['POST'])
+def predict_batch():
+    pass
+
+
+@app.route('/retrain', methods=['POST'])
+def retrain_model():
+    pass
+
+
 @app.errorhandler(BadRequest)
 def error_me_out(error):
     yer_error = {
