@@ -1,12 +1,15 @@
 #!/usr/bin/env python
+import pandas as pd
 from flask import Flask
 from flask import request
 from flask import jsonify
 from werkzeug.exceptions import BadRequest
 
 from forecaster.exceptions import BasicValidationError
+from forecaster.model import PriceModel
 
 app = Flask(__name__)
+forecaster = PriceModel()
 
 
 @app.route('/')
@@ -21,7 +24,7 @@ def root():
 @app.route('/predict', methods=['POST'])
 def predict():
     content = request.get_json(force=True)  # eh, why require content-type?
-    required_keys = ['date', 'cnt_rooms', 'flat_area', 'rent_base',
+    required_keys = ('date', 'cnt_rooms', 'flat_area', 'rent_base',
                      'rent_total',
                      'flat_type', 'flat_interior_quality', 'flat_condition',
                      'flat_age',
@@ -29,14 +32,14 @@ def predict():
                      'has_balcony',
                      'has_garden', 'has_kitchen', 'has_guesttoilet',
                      'geo_city',
-                     'geo_city_part']
+                     'geo_city_part')
+    for el in content:
+        if not all([key in el.keys() for key in required_keys]):
+            raise BasicValidationError("Data for predict missing a required key")
 
-    if not all([key in content.keys() for key in required_keys]):
-        raise BasicValidationError("Data for predict missing a required key")
-
-    response_body = ''
-
-    return jsonify(response_body)
+    df = pd.DataFrame(content)
+    response_body = forecaster.predict(df)
+    return jsonify(response_body), 200
 
 
 @app.route('/predict_batch', methods=['POST'])
