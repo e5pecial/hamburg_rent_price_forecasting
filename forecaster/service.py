@@ -80,5 +80,5 @@ def error_all_the_things(error):
     return jsonify(yer_error), 500
 
 
-# if __name__ == '__main__':
-#     app.run(host='localhost', port=2282, debug=True)
+if __name__ == '__main__':
+    app.run(host='localhost', port=2282, debug=True)

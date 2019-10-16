@@ -21,7 +21,7 @@ class PriceModel(object):
         if self.estimator is None:
             raise ModelNotFittedException("Model not fitted yet!")
 
-        return self.estimator.preidct(prepared_data)
+        return self.estimator.predict(prepared_data)
 
     def fit(self, X: pd.Series, y: pd.DataFrame) -> None:
         raise NotImplementedError("Method not implemented yet")
