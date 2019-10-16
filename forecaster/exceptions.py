@@ -4,3 +4,7 @@ class BasicValidationError(Exception):
 
 class ModelNotFittedException(Exception):
     pass
+
+
+class ModelNotFoundException(Exception):
+    pass

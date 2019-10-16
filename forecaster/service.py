@@ -1,8 +1,9 @@
 #!/usr/bin/env python
+import json
+
 import pandas as pd
 from flask import Flask
-from flask import request
-from flask import jsonify
+from flask import request, jsonify, abort
 from werkzeug.exceptions import BadRequest
 
 from forecaster.exceptions import BasicValidationError
@@ -10,6 +11,7 @@ from forecaster.model import PriceModel
 
 app = Flask(__name__)
 forecaster = PriceModel()
+forecaster.load()
 
 
 @app.route('/')
@@ -23,7 +25,7 @@ def root():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    content = request.get_json(force=True)  # eh, why require content-type?
+    content = request.get_json(force=True)
     required_keys = ('date', 'cnt_rooms', 'flat_area', 'rent_base',
                      'rent_total',
                      'flat_type', 'flat_interior_quality', 'flat_condition',
@@ -33,18 +35,17 @@ def predict():
                      'has_garden', 'has_kitchen', 'has_guesttoilet',
                      'geo_city',
                      'geo_city_part')
-    for el in content:
-        if not all([key in el.keys() for key in required_keys]):
-            raise BasicValidationError("Data for predict missing a required key")
+
+    if not all([key in content.keys() for key in required_keys]):
+        raise BasicValidationError(
+            "Data for predict missing a required key")
 
     df = pd.DataFrame(content)
     response_body = forecaster.predict(df)
-    return jsonify(response_body), 200
-
-
-@app.route('/predict_batch', methods=['POST'])
-def predict_batch():
-    pass
+    return response_body.to_json(), 200
+    # except Exception as e:
+    #     print(e)# yes, it's doesn't durable exception handling
+    #     abort(500)
 
 
 @app.route('/retrain', methods=['POST'])
@@ -77,3 +78,7 @@ def error_all_the_things(error):
         'status': 500
     }
     return jsonify(yer_error), 500
+
+
+# if __name__ == '__main__':
+#     app.run(host='localhost', port=2282, debug=True)
