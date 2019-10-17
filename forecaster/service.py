@@ -26,7 +26,6 @@ def root():
 def predict():
     content = request.get_json(force=True)
     required_keys = ('date', 'cnt_rooms', 'flat_area', 'rent_base',
-                     'rent_total',
                      'flat_type', 'flat_interior_quality', 'flat_condition',
                      'flat_age',
                      'flat_thermal_characteristic', 'has_elevator',
@@ -39,7 +38,11 @@ def predict():
         raise BasicValidationError(
             "Data for predict missing a required key")
 
-    df = pd.DataFrame(content)
+    try:
+        df = pd.DataFrame(content)
+    except ValueError:  # fast crutch for prediction for one example
+        df = pd.DataFrame(content, index=[0])
+
     response_body = forecaster.predict(df)
     return jsonify(response_body), 200
 
