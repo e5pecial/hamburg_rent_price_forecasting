@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-import json
 
 import pandas as pd
 from flask import Flask
-from flask import request, jsonify, abort
+from flask import request, jsonify
 from werkzeug.exceptions import BadRequest
 
 from forecaster.exceptions import BasicValidationError
