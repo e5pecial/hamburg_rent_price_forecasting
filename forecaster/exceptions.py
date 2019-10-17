@@ -8,3 +8,7 @@ class ModelNotFittedException(Exception):
 
 class ModelNotFoundException(Exception):
     pass
+
+
+class EmptyDatasetException(Exception):
+    pass

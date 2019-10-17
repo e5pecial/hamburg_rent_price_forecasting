@@ -25,7 +25,7 @@ Data was sometimes noisy (flat_type with mistake, huge differences between some 
 Start service:
 `docker-compose up --build`
 
-It will be started in `0.0.0.0:2282`
+It will be started in `http://0.0.0.0:2282`
 
 After that you can trigger API method `/preidct` and send to it
 test pandas Dataframe in `to_dict()` view. (see [example.py](example.py) 

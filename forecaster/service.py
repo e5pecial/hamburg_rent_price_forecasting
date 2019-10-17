@@ -42,10 +42,7 @@ def predict():
 
     df = pd.DataFrame(content)
     response_body = forecaster.predict(df)
-    return response_body.to_json(), 200
-    # except Exception as e:
-    #     print(e)# yes, it's doesn't durable exception handling
-    #     abort(500)
+    return jsonify(response_body), 200
 
 
 @app.route('/retrain', methods=['POST'])
@@ -78,7 +75,3 @@ def error_all_the_things(error):
         'status': 500
     }
     return jsonify(yer_error), 500
-
-
-if __name__ == '__main__':
-    app.run(host='localhost', port=2282, debug=True)

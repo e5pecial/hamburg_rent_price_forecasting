@@ -20,7 +20,7 @@ class FeatureProcessor(object):
         if not scaler:
             self.__init_serilaized_scaler()
 
-    def add_features(self, data: pd.Series) -> pd.DataFrame:
+    def add_features(self, data: pd.DataFrame) -> pd.DataFrame:
         if data is None:
             raise DataIsMissingException("Empty dataset!")
 
@@ -28,23 +28,22 @@ class FeatureProcessor(object):
         data.drop(['date', 'flat_thermal_characteristic', 'geo_city'],
                   axis=1, inplace=True)
         data['flat_area'] = data['flat_area'].astype(int)
-        X = data[[col for col in data.columns if
-                  col not in ['rent_total', 'log_rent_total']]]
 
-        self._add_log_rent_base(X)
+        X = data[[col for col in data.columns if
+                  col not in ['rent_total', 'log_rent_total']]].copy()
+
+        X['log_rent_base'] = np.log1p(X['rent_base'])
+        X.drop(columns=['rent_base'], axis=1, inplace=True)
+
+        X[self.to_normalize] = self.scaler.transform(X[self.to_normalize]).copy()
         prepared = self._add_one_hot_features(X)
         return prepared
 
     def _add_one_hot_features(self, X):
-        X[self.to_normalize] = self.scaler.transform(X[self.to_normalize])
         for col in X.select_dtypes(['object']).columns:
             X[col] = X[col].astype('category')
         X['cnt_rooms'] = X['cnt_rooms'].astype('category')
         return pd.get_dummies(X)
-
-    def _add_log_rent_base(self, X):
-        X['log_rent_base'] = np.log1p(X['rent_base'])
-        X.drop(columns=['rent_base'], axis=1, inplace=True)
 
     def _add_date_features(self, data):
         print(data.columns)
