@@ -20,6 +20,9 @@ Also, I could not formulate this problem in terms of time series,
 Data was sometimes noisy (flat_type with mistake, huge differences between some `base` and `total_rent` prices. And I think we have only one year --
  also it's not enough for good validation.
  
+And (imho) this this quality is quite low -- 
+but I would like to know how to solve this problem with the best results.
+ 
 ## Simple usage
 
 Start service:
