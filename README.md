@@ -70,3 +70,11 @@ print(resp.text)
 200
 {"pred":{"0":566.0894462133544}}
 ```
+
+## Ideas and TODO:
+I have some ideas how to make it better and what should by tried:
+* Target Encoding for categorial features
+* Quantile Transformation for prices
+* Try RNN models
+* Try to drop more outliers & use ordinal features too
+* Also should add tests to service, refactor, change some structure, maybe add webUI
