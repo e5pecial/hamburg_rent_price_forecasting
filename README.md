@@ -53,11 +53,7 @@ message_to_send = {'cnt_rooms': 1,
                    'geo_city_part': 'wandsbek',
                    'date': '2018-02-2',
                    'flat_thermal_characteristic': 'None',
-                   'geo_city': 'hamburg',
-                   'weekday': 2,
-                   'weekofyear': 39,
-                   'month': 9,
-                   'dayofyear': 269}
+                   'geo_city': 'hamburg'}
 
 resp = requests.post("http://localhost:2282/predict",
                      json=message_to_send)
@@ -77,4 +73,6 @@ I have some ideas how to make it better and what should by tried:
 * Quantile Transformation for prices
 * Try RNN models
 * Try to drop more outliers & use ordinal features too
-* Also should add tests to service, refactor, change some structure, maybe add webUI
+* Also should add tests to service
+* Refactor, change some structure, maybe add webUI
+* Add logging
